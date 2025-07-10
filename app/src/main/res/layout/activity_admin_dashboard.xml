@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/userDashboardLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF ">
+
+    <!-- Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#B2EBF2 "
+        android:padding="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/recycle_logo"
+            android:contentDescription="App Logo"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Admin Dashboard"
+            android:textColor="#00796B"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Profile/Logout Icon -->
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_person"
+            android:contentDescription="User Profile"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Welcome Text -->
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, [Admin]"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#00796B"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- View My Request Button -->
+    <Button
+        android:id="@+id/btnViewMyRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View all requests"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#00796B"
+        android:textColor="#FFFFFF"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"/>
+
+
+
+</LinearLayout>

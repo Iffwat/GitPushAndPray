@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recycleDetailLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#B2EBF2"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:elevation="4dp">
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/recycle_logo"
+                android:contentDescription="App Logo"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Admin Panel"
+                android:textColor="#00796B"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Profile/Logout Icon -->
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_person"
+                android:contentDescription="Admin Profile"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- Form Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="#FFFFFF">
+
+            <!-- Item Name -->
+            <TextView
+                android:id="@+id/tvItemName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Item Name: Plastic"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Notes -->
+            <TextView
+                android:id="@+id/tvNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="User Notes:"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Weight Input -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight Collected (kg):"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtWeight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g., 2.5"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Status Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Status:"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Total Price (read-only display) -->
+            <TextView
+                android:id="@+id/tvTotalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Price: RM 0.00"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Update Button -->
+            <Button
+                android:id="@+id/btnUpdateRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Update Request"
+                android:textAllCaps="false"
+                android:backgroundTint="#00796B"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

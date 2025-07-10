@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/userDashboardLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- Header Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#C8E6C9"
+        android:padding="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/recycle_logo"
+            android:contentDescription="App Logo"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="User Dashboard"
+            android:textColor="#2E7D32"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Profile/Logout Icon -->
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_person"
+            android:contentDescription="User Profile"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+    <!-- Welcome Text -->
+    <TextView
+        android:id="@+id/tvWelcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome, [Username]"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#388E3C"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal" />
+
+    <!-- View My Request Button -->
+    <Button
+        android:id="@+id/btnViewMyRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View My Request"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#A5D6A7"
+        android:textColor="#1B5E20"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"/>
+
+    <!-- Submit New Request Button -->
+    <Button
+        android:id="@+id/btnSubmitNewRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit New Request"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#81C784"
+        android:textColor="#1B5E20"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="12dp"
+        android:drawableLeft="@drawable/ic_add" />
+
+</LinearLayout>

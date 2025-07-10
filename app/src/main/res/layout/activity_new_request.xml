@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/requestForm"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#C8E6C9"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:elevation="4dp">
+
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/recycle_logo"
+                android:contentDescription="App Logo"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="User Dashboard"
+                android:textColor="#2E7D32"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Profile/Logout Icon -->
+            <ImageView
+                android:id="@+id/imgProfile"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_person"
+                android:contentDescription="User Profile"
+                android:clickable="true"
+                android:focusable="true" />
+        </LinearLayout>
+
+        <!-- ✅ FORM CONTENT BELOW -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="#FFFFFF">
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvRequestTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit Recycle Request"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#2E7D32"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Item Type Spinner -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Recyclable Item:"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerItemType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Address Field -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Collection Address:"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your pickup address"
+                android:inputType="textPostalAddress"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Optional Notes -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Additional Notes (optional):"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtNotes"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="e.g., Pickup after 5pm"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Submit Button -->
+            <Button
+                android:id="@+id/btnSubmitRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Request"
+                android:textAllCaps="false"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

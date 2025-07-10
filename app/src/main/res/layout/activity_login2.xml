@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loginLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="#F1F8E9">
+
+    <!-- Recycle Request Title -->
+    <TextView
+        android:id="@+id/tvAppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recycle Request Login"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#2E7D32"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/imgRecycleLogo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp" />
+
+    <!-- Recycle Logo Image -->
+    <ImageView
+        android:id="@+id/imgRecycleLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/recycle_logo"
+        app:layout_constraintTop_toBottomOf="@id/tvAppTitle"
+        app:layout_constraintBottom_toTopOf="@id/edtUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Username -->
+    <EditText
+        android:id="@+id/edtUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Username or Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintTop_toBottomOf="@id/tvAppTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="120dp"/>
+
+    <!-- Password -->
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintTop_toBottomOf="@id/edtUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Login Button -->
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:onClick="loginClicked"
+        android:textAllCaps="false"
+        android:backgroundTint="#388E3C"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/edtPassword"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <!-- Register Prompt -->
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Don't have an account? Register here"
+        android:textColor="#1B5E20"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/btnLogin"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
