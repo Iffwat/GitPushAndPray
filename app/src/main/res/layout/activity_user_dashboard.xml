@@ -46,6 +46,7 @@
             android:contentDescription="User Profile"
             android:clickable="true"
             android:focusable="true" />
+
     </LinearLayout>
 
     <!-- Welcome Text -->
