@@ -19,6 +19,9 @@
         <activity android:name=".AdminDashboardActivity" />
 
         <activity
+            android:name=".SubmitRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
