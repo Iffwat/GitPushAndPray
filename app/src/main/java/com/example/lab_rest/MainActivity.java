@@ -3,6 +3,7 @@ package com.example.lab_rest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.example.lab_rest.sharedpref.SharedPrefManager;
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvHello;
+    private Button btnGoToSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,19 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, LoginActivity.class);
         //startActivity(intent);
 
+        // TODO: 🔁 Replace with your main layout file if it's not named activity_main.xml
+        setContentView(R.layout.activity_main);
+        // Initialize button
+        btnGoToSubmit = findViewById(R.id.btnGoToSubmit);
+        // TODO: 🔁 Make sure this ID exists in your XML layout file
+
+        btnGoToSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 🔁 Change SubmitRequestActivity.class to match your actual Activity class name
+                Intent intent = new Intent(MainActivity.this, SubmitRequestActivity.class);
+                startActivity(intent);
+            }});
     }
 
     public void logoutClicked(View view) {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit Recycling Request"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:paddingBottom="24dp"
+            android:textColor="#000000" />
+
+        <!-- Spinner - Item Type -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Item Type"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:textColor="#444444" />
+
+        <Spinner
+            android:id="@+id/spItemType"
+            android:layout_width="match_parent"
+            android:layout_height="43dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- EditText - Address -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pickup Address"
+            android:textSize="16sp"
+            android:textColor="#444444" />
+
+        <EditText
+            android:id="@+id/etAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your full address"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:maxLines="5"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- EditText - Notes -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notes (optional)"
+            android:textSize="16sp"
+            android:textColor="#444444" />
+
+        <EditText
+            android:id="@+id/etNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Any extra instructions?"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:layout_marginBottom="24dp"
+            android:background="@android:drawable/edit_text" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/btnSubmitRequest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit Request"
+            android:textSize="16sp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</ScrollView>
