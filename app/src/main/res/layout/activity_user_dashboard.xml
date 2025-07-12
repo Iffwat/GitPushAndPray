@@ -40,8 +40,8 @@
         <!-- Profile/Logout Icon -->
         <ImageView
             android:id="@+id/imgProfile"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/ic_person"
             android:contentDescription="User Profile"
             android:clickable="true"
@@ -84,7 +84,6 @@
         android:backgroundTint="#81C784"
         android:textColor="#1B5E20"
         android:paddingHorizontal="24dp"
-        android:paddingVertical="12dp"
-        android:drawableLeft="@drawable/ic_add" />
+        android:paddingVertical="12dp" />
 
 </LinearLayout>

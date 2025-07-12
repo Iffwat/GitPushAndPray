@@ -15,23 +15,23 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.lab_rest.model.User;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminDashboardActivity extends AppCompatActivity {
 
-    private TextView tvHello;
+    private TextView tvWelcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        setContentView(R.layout.activity_admin_dashboard);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.adminDashboardLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
         // get references
-        tvHello = findViewById(R.id.tvHello);
+        tvWelcome = findViewById(R.id.tvWelcome);
 
         // greet the user
         // if the user is not logged in we will directly them to LoginActivity
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // Greet user
             User user = spm.getUser();
-            tvHello.setText("Hello " + user.getUsername());
+            tvWelcome.setText("Hello " + user.getUsername());
         }
 
         // forward to Login Page (Update this part)
