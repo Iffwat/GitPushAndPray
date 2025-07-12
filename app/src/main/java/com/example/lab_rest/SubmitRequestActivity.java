@@ -1,12 +1,7 @@
 package com.example.lab_rest;
+// TODO: 🔁 Change this to your actual package name if needed
 
-import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -16,65 +11,133 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.lab_rest.model.RecyclableItem;
+import com.example.lab_rest.model.RequestModel;
+import com.example.lab_rest.remote.ApiUtils;
+import com.example.lab_rest.remote.UserService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class SubmitRequestActivity extends AppCompatActivity {
 
     private Spinner spItemType;
     private EditText etAddress, etNotes;
     private Button btnSubmitRequest;
 
-    // TODO: You can change this list or fetch dynamically from your database (via REST API)
-    private String[] itemTypes = {"Paper", "Plastic", "Glass", "Metal", "Electronics"};
+    private ArrayList<String> itemNameList = new ArrayList<>();
+    private ArrayList<Integer> itemIdList = new ArrayList<>();
+    private ArrayAdapter<String> itemAdapter;
+    private UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: Make sure this matches your XML file name (e.g., R.layout.activity_submit_request)
         setContentView(R.layout.activity_submit_request);
+        // TODO: 🔁 Make sure your layout file is named correctly and includes the IDs used below
 
-        // Linking UI elements
-        spItemType = findViewById(R.id.spItemType);   // Must match ID in XML
-        etAddress = findViewById(R.id.etAddress);     // Must match ID in XML
-        etNotes = findViewById(R.id.etNotes);         // Must match ID in XML
-        btnSubmitRequest = findViewById(R.id.btnSubmitRequest); // Must match ID in XML
+        // Bind UI elements
+        spItemType = findViewById(R.id.spItemType);
+        etAddress = findViewById(R.id.etAddress);
+        etNotes = findViewById(R.id.etNotes);
+        btnSubmitRequest = findViewById(R.id.btnSubmitRequest);
 
-        // Set Spinner values (temporary: static)
-        // TODO: Replace with dynamic values from backend if needed
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, itemTypes);
-        spItemType.setAdapter(adapter);
+        // Spinner setup
+        itemAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, itemNameList);
+        itemAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spItemType.setAdapter(itemAdapter);
 
-        // Submit button click listener
+        // Retrofit service
+        userService = ApiUtils.getUserService();
+
+        // Load recyclable items
+        loadItemsFromDatabase();
+
+        // Handle button click
         btnSubmitRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitRequest(); // Calls method to process form
+                submitRequest();
             }
         });
     }
 
     private void submitRequest() {
-        // Get user input
-        String selectedItem = spItemType.getSelectedItem().toString();
         String address = etAddress.getText().toString().trim();
         String notes = etNotes.getText().toString().trim();
+        int selectedPosition = spItemType.getSelectedItemPosition();
 
-        // Validate required input
         if (address.isEmpty()) {
             etAddress.setError("Address is required");
             etAddress.requestFocus();
             return;
         }
 
-        // TODO: Replace this with your actual API call to backend (MySQL via pRESTige)
-        // Example:
-        // ApiClient.postRequest(userId, selectedItem, address, notes);
+        if (selectedPosition < 0 || selectedPosition >= itemIdList.size()) {
+            Toast.makeText(this, "Invalid item selection", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Temporary feedback for testing
-        Toast.makeText(this, "Request submitted:\nItem: " + selectedItem + "\nAddress: " + address, Toast.LENGTH_LONG).show();
+        int selectedItemId = itemIdList.get(selectedPosition);
+        String selectedItemName = itemNameList.get(selectedPosition);
 
-        // TODO: Optionally clear fields after submission
-        spItemType.setSelection(0);
-        etAddress.setText("");
-        etNotes.setText("");
+        // TODO: 🔁 Replace this with real user ID from login session (e.g., SharedPreferences)
+        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);  // default -1 if not found
+
+        RequestModel request = new RequestModel(userId, selectedItemId, address, notes);
+
+        // Send POST request
+        userService.submitRequest(request).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(SubmitRequestActivity.this, "Request submitted successfully!", Toast.LENGTH_SHORT).show();
+
+                    // Clear form
+                    spItemType.setSelection(0);
+                    etAddress.setText("");
+                    etNotes.setText("");
+                } else {
+                    Toast.makeText(SubmitRequestActivity.this, "Failed to submit request", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(SubmitRequestActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadItemsFromDatabase() {
+        Call<List<RecyclableItem>> call = userService.getRecyclableItems();
+
+        call.enqueue(new Callback<List<RecyclableItem>>() {
+            @Override
+            public void onResponse(Call<List<RecyclableItem>> call, Response<List<RecyclableItem>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    itemNameList.clear();
+                    itemIdList.clear();
+                    for (RecyclableItem item : response.body()) {
+                        itemIdList.add(item.getItemId());
+                        itemNameList.add(item.getItemName());
+                    }
+                    itemAdapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(SubmitRequestActivity.this, "Failed to load items", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RecyclableItem>> call, Throwable t) {
+                Toast.makeText(SubmitRequestActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
