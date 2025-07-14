@@ -49,6 +49,16 @@
             android:textSize="14sp"
             android:textColor="#4CAF50"
             android:layout_marginTop="4dp" />
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#F44336"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

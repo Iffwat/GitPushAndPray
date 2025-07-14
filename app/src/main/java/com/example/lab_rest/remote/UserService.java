@@ -2,6 +2,7 @@ package com.example.lab_rest.remote;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -33,5 +34,9 @@ public interface UserService {
 
     @GET("user_requests/{user_id}")
     Call<List<RequestHistoryModel>> getUserRequests(@Path("user_id") int userId);
+
+    @DELETE("cancel_request/{request_id}")
+    Call<Void> cancelRequest(@Path("request_id") int requestId);
+
 
 }
