@@ -15,9 +15,11 @@
         android:theme="@style/Theme.Lab_REST"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".UserRequest"
+            android:exported="false" />
         <activity android:name=".UserDashboardActivity" />
         <activity android:name=".AdminDashboardActivity" />
-
         <activity
             android:name=".SubmitRequestActivity"
             android:exported="false" />

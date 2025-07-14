@@ -6,8 +6,10 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 import com.example.lab_rest.model.RecyclableItem;
+import com.example.lab_rest.model.RequestHistoryModel;
 import com.example.lab_rest.model.RequestModel;
 import com.example.lab_rest.model.User;
 
@@ -28,5 +30,8 @@ public interface UserService {
 
     @POST("submit_request")
     Call<Void> submitRequest(@Body RequestModel request);
+
+    @GET("user_requests/{user_id}")
+    Call<List<RequestHistoryModel>> getUserRequests(@Path("user_id") int userId);
 
 }

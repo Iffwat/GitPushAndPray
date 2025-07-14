@@ -68,7 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }});
     }
-
+    public void recycleListClicked(View view) {
+        Intent intent = new Intent(MainActivity.this, UserRequest.class);
+        startActivity(intent);
+    }
     public void logoutClicked(View view) {
 
         // implement this

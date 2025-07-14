@@ -38,8 +38,13 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
+
     //Retrofit https://square.github.io/retrofit/ - latest vesion https://github.com/square/retrofit.
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     //Gson -> json data to java or kotlin format
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+    implementation ("com.google.android.material:material:1.11.0")
+    implementation ("androidx.cardview:cardview:1.0.0")
+
 }
