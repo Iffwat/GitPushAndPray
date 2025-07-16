@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edtItemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Item Name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edtPricePerKg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Price per kg (RM)"
+            android:inputType="numberDecimal"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnSaveItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#00796B"
+            android:textColor="#fff" />
+    </LinearLayout>
+</ScrollView>

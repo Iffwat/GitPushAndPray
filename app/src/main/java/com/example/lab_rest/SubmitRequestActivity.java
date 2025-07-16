@@ -15,6 +15,7 @@ import com.example.lab_rest.model.RecyclableItem;
 import com.example.lab_rest.model.RequestModel;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
+import com.example.lab_rest.sharedpref.SharedPrefManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,8 +88,7 @@ public class SubmitRequestActivity extends AppCompatActivity {
         String selectedItemName = itemNameList.get(selectedPosition);
 
         // TODO: 🔁 Replace this with real user ID from login session (e.g., SharedPreferences)
-        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        int userId = prefs.getInt("user_id", -1);  // default -1 if not found
+        int userId = new SharedPrefManager(this).getUser().getId();
 
         RequestModel request = new RequestModel(userId, selectedItemId, address, notes);
 

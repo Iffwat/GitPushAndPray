@@ -16,6 +16,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ItemFormActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ItemManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminRequestListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdminUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewRequestActivity"
+            android:exported="false" />
+        <activity
             android:name=".UserRequest"
             android:exported="false" />
         <activity android:name=".UserDashboardActivity" />

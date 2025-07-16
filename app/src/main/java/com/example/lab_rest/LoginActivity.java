@@ -2,23 +2,18 @@ package com.example.lab_rest;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.lab_rest.model.FailLogin;
-import com.example.lab_rest.model.User;
+import com.example.lab_rest.model.LoginRequest;
+import com.example.lab_rest.model.LoginResponse;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
-import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,116 +21,73 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText edtUsername;
-    private EditText edtPassword;
+    EditText edtUsername, edtPassword;
+    Button btnLogin;
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login2);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.loginLayout), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        // get references to form elements
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
-    }
+        btnLogin = findViewById(R.id.btnLogin);
 
-    /**
-     * Login button action handler
-     */
-    public void loginClicked(View view) {
-        String username = edtUsername.getText().toString();
-        String password = edtPassword.getText().toString();
+        userService = ApiUtils.getUserService();
 
-        if (validateLogin(username, password)) {
-            doLogin(username, password);
-        }
-    }
-
-    /**
-     * Call REST API to login
-     */
-    private void doLogin(String username, String password) {
-        UserService userService = ApiUtils.getUserService();
-
-        Call<User> call;
-        if (username.contains("@")) {
-            call = userService.loginEmail(username, password);
-        } else {
-            call = userService.login(username, password);
-        }
-
-        call.enqueue(new Callback<User>() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call call, Response response) {
-                if (response.isSuccessful()) {
-                    User user = (User) response.body();
-                    if (user != null && user.getToken() != null) {
-                        displayToast("Login successful");
-                        displayToast("Token: " + user.getToken());
+            public void onClick(View v) {
+                loginClicked();
+            }
+        });
+    }
 
-                        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
-                        spm.storeUser(user);
+    private void loginClicked() {
+        String username = edtUsername.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
 
-                        String role = user.getRole();
-                        finish(); // close login screen
+        if (username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                        if ("admin".equalsIgnoreCase(role)) {
-                            startActivity(new Intent(getApplicationContext(), AdminDashboardActivity.class));
-                        } else if ("user".equalsIgnoreCase(role)) {
-                            startActivity(new Intent(getApplicationContext(), UserDashboardActivity.class));
+        LoginRequest request = new LoginRequest(username, password);
+        Call<LoginResponse> call = userService.loginUser(request);
+
+        call.enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginResponse = response.body();
+
+                    if (loginResponse.getStatus().equals("success")) {
+                        SharedPrefManager sharedPrefManager = new SharedPrefManager(LoginActivity.this);
+                        sharedPrefManager.storeUser(loginResponse.getUser());
+
+                        String role = loginResponse.getUser().getRole();
+                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+
+                        if (role.equals("admin")) {
+                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
                         } else {
-                            displayToast("Unknown role: " + role);
+                            startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
                         }
+
+                        finish(); // Optional: prevent going back to login
                     } else {
-                        displayToast("Login error");
+                        Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    String errorResp = null;
-                    try {
-                        errorResp = response.errorBody().string();
-                        FailLogin e = new Gson().fromJson(errorResp, FailLogin.class);
-                        displayToast(e.getError().getMessage());
-                    } catch (Exception e) {
-                        Log.e("MyApp:", e.toString());
-                        displayToast("Error");
-                    }
+                    Toast.makeText(LoginActivity.this, "Login failed. Try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
-                displayToast("Error connecting to server.");
-                displayToast(t.getMessage());
-                Log.e("MyApp:", t.toString());
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    /**
-     * Client-side login form validation
-     */
-    private boolean validateLogin(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            displayToast("Username is required");
-            return false;
-        }
-        if (password == null || password.trim().isEmpty()) {
-            displayToast("Password is required");
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Display a toast message
-     */
-    public void displayToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

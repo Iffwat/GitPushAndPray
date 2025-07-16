@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -38,6 +39,19 @@ public class AdminDashboardActivity extends AppCompatActivity {
         // get references
         tvWelcome = findViewById(R.id.tvWelcome);
         imgProfile = findViewById(R.id.imgProfile); // ADD: find the ImageView
+
+        Button btnViewAll = findViewById(R.id.btnViewMyRequest);
+        btnViewAll.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, AdminRequestListActivity.class);
+            startActivity(intent);
+        });
+
+        Button btnManageItems = findViewById(R.id.btnManageItems);
+        btnManageItems.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminDashboardActivity.this, ItemManagementActivity.class);
+            startActivity(intent);
+        });
+
 
         // greet the user
         SharedPrefManager spm = new SharedPrefManager(getApplicationContext());

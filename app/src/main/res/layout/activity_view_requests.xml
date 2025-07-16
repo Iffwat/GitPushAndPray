@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/adminAllRequestsLayout"
+    android:id="@+id/viewRequestsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF">
 
-    <!-- ✅ Header Bar -->
+    <!-- ✅ Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#B2EBF2"
+        android:background="#C8E6C9"
         android:padding="12dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:elevation="4dp">
 
-        <!-- Logo -->
         <ImageView
             android:id="@+id/imgLogo"
             android:layout_width="36dp"
@@ -25,35 +24,31 @@
             android:contentDescription="App Logo"
             android:layout_marginEnd="8dp" />
 
-        <!-- Title -->
         <TextView
-            android:id="@+id/tvAdminTitle"
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="All Recycle Requests"
-            android:textColor="#00796B"
+            android:text="My Requests"
+            android:textColor="#2E7D32"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Profile Icon -->
         <ImageView
-            android:id="@+id/imgAdminProfile"
+            android:id="@+id/imgProfile"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_person"
-            android:contentDescription="Admin Profile"
+            android:contentDescription="User Profile"
             android:clickable="true"
             android:focusable="true" />
     </LinearLayout>
 
-    <!-- ✅ List of Requests -->
-    <ListView
-        android:id="@+id/lvAllRequests"
+    <!-- ✅ ListView Container -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerRequests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#BDBDBD"
-        android:dividerHeight="1dp"
-        android:padding="12dp"
-        android:layout_marginTop="8dp" />
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"/>
 </LinearLayout>

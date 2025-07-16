@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +23,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemName, tvAddress, tvStatus, tvPrice;
-
+        Button btnCancel; // ✅ Add this
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -30,9 +31,10 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvStatus = itemView.findViewById(R.id.tvStatus);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            btnCancel = itemView.findViewById(R.id.btnCancel); // NEW
+            btnCancel = itemView.findViewById(R.id.btnCancel); // ✅ Already used here
         }
     }
+
 
     @Override
     public RequestAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
