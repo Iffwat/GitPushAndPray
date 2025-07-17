@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lab_rest.adapter.RequestAdapter;
 import com.example.lab_rest.model.RequestHistoryModel;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
+import com.example.lab_rest.sharedpref.SharedPrefManager;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class UserRequest extends AppCompatActivity {
     private RequestAdapter adapter;
     private UserService userService;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,20 +38,21 @@ public class UserRequest extends AppCompatActivity {
 
         userService = ApiUtils.getUserService();
 
-        SharedPreferences prefs = getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
-        int userId = prefs.getInt("user_id", -1);
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
 
-        if (userId == -1) {
-            Toast.makeText(this, "Session expired. Please log in.", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        //if (userId == -1) {
+         //   Toast.makeText(this, "Session expired. Please log in.", Toast.LENGTH_SHORT).show();
+         //   finish();
+         //   return;
+        //}
 
-        loadRequests(userId);
+        loadRequests(token);
     }
 
-    private void loadRequests(int userId) {
-        userService.getUserRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() { // error getUserRequest()
+    private void loadRequests(String token) {
+        userService.getUserRequests(token).enqueue(new Callback<List<RequestHistoryModel>>() {
             @Override
             public void onResponse(Call<List<RequestHistoryModel>> call, Response<List<RequestHistoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -73,7 +78,11 @@ public class UserRequest extends AppCompatActivity {
 
     // ✅ Moved this outside of loadRequests() / onResponse()
     private void cancel_request(int requestId, int position) {
-        userService.cancelRequest(requestId).enqueue(new Callback<Void>() {
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
+        userService = ApiUtils.getUserService();
+        userService.cancelRequest(token,requestId).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {

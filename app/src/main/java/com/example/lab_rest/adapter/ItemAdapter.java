@@ -1,63 +1,87 @@
+// File: ItemAdapter.java
 package com.example.lab_rest.adapter;
 
 import android.content.Context;
-import android.view.*;
-import android.widget.*;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.lab_rest.R;
 import com.example.lab_rest.model.RecyclableItem;
-
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
-    private final Context context;
-    private final List<RecyclableItem> itemList;
-    private final ItemActionListener listener;
+    private  Context context;
+    private  List<RecyclableItem> itemList;
 
-    public interface ItemActionListener {
-        void onEditClicked(RecyclableItem item);
-        void onDeleteClicked(int itemId);
-    }
 
-    public ItemAdapter(Context context, List<RecyclableItem> itemList, ItemActionListener listener) {
+    private int currentPos;
+
+
+
+    public ItemAdapter(Context context, List<RecyclableItem> itemList) {
         this.context = context;
         this.itemList = itemList;
-        this.listener = listener;
+
     }
+    private Context getContext(){ return context;}
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         TextView tvItemName, tvPrice;
-        ImageButton btnEdit, btnDelete;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            btnEdit = itemView.findViewById(R.id.btnEdit);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            // register context menu listener on itemView
+            itemView.setOnLongClickListener(this);
         }
+
+        @Override
+        public boolean onLongClick(View view) {
+            currentPos = getAdapterPosition();
+            return false;
+        }
+        @Override
+        public boolean onLongClickUseDefaultHapticFeedback(@NonNull View v) {
+            return View.OnLongClickListener.super.onLongClickUseDefaultHapticFeedback(v);
+        }
+
+
     }
 
-    @NonNull
     @Override
-    public ItemAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_recyclable, parent, false);
-        return new ViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        // Inflate layout using the single item layout
+        View view = inflater.inflate(R.layout.item_recyclable, parent, false);
+        // Return a new holder instance
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemAdapter.ViewHolder holder, int position) {
-        RecyclableItem item = itemList.get(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // bind data to the view holder instance
+         RecyclableItem m = itemList.get(position);
+        holder.tvItemName.setText(m.getItemName());
+        holder.tvPrice.setText("Price: RM " + m.getPricePerKg() + " /kg");
 
-        holder.tvItemName.setText(item.getItemName());
-        holder.tvPrice.setText(String.format("Price: RM %.2f /kg", item.getPricePerKg()));
-
-        holder.btnEdit.setOnClickListener(v -> listener.onEditClicked(item));
-        holder.btnDelete.setOnClickListener(v -> listener.onDeleteClicked(item.getItemId()));
     }
+    public RecyclableItem getSelectedItem() {
+        // return the book record if the current selected position/index is valid
+        if(currentPos>=0 && itemList !=null && currentPos<itemList.size()) {
+            return itemList.get(currentPos);
+        }
+        return null;
+    }
+
 
     @Override
     public int getItemCount() {

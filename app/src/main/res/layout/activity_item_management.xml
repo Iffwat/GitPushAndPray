@@ -49,19 +49,22 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerItems"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/fabAddItem"
-        android:clipToPadding="false"
-        android:paddingBottom="72dp" />
-
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddItem"
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
-        android:contentDescription="Add Item"
-        android:src="@android:drawable/ic_input_add" />
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Add New Book"
+        android:onClick="floatingAddBookClicked"
+        android:src="@drawable/baseline_add_circle_outline_24" />
+
+
 </LinearLayout>

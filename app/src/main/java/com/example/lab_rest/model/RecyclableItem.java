@@ -5,12 +5,6 @@ public class RecyclableItem {
     private String itemName;
     private double pricePerKg;
 
-    // Add this:
-    @Override
-    public String toString() {
-        return itemName!= null ? itemName : "Unnamed Item";
-    }
-
 
     public int getItemId() { return itemId; }
     public String getItemName() { return itemName; }

@@ -7,6 +7,8 @@ public class SubmitRequest {
     private String address;
     private String notes;
 
+
+
     public SubmitRequest(int userId, int itemId, String address, String notes) {
         this.userId = userId;
         this.itemId = itemId;

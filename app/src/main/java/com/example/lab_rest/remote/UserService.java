@@ -1,6 +1,7 @@
 package com.example.lab_rest.remote;
 
 import com.example.lab_rest.model.AdminRequestModel;
+import com.example.lab_rest.model.DeleteResponse;
 import com.example.lab_rest.model.LoginRequest;
 import com.example.lab_rest.model.LoginResponse;
 import com.example.lab_rest.model.RecyclableItem;
@@ -40,35 +41,54 @@ public interface UserService {
 
 
     // User Requests
-    @GET("user/requests/{userId}")
-    Call<List<RequestHistoryModel>> getUserRequests(@Path("userId") int userId);
+    @GET("requests")
+    Call<List<RequestHistoryModel>> getUserRequests(@Header("api-key") String api_key);
 
     @DELETE("requests/{id}")
-    Call<Void> cancelRequest(@Path("id") int requestId);
+    Call<Void> cancelRequest(@Header("api-key") String api_key, @Path("id") int requestId);
 
-    @Headers("Content-Type: application/json")
+
     @POST("requests")
-    Call<Void> submitRequest(@Body RequestModel request);
+    Call<Void> submitRequest(@Header("api-key") String api_key,
+                             @Field("user_id") int user_id,
+                             @Field("item_id") int item_id,
+                             @Field("address") String address,
+                             @Field("request_date") String request_date,
+                             @Field("status") String status,
+                             @Field("weight") double weight,
+                             @Field("total_price") double total_price,
+                             @Field("notes") String notes);
 
     // Admin Requests
     @GET("requests")
     Call<List<AdminRequestModel>> getAllRequests(@Header("api-key") String api_key);
 
-    @Headers("Content-Type: application/json")
-    @POST("requests")
-    Call<Map<String, String>> updateRequest(@Body UpdateRequestModel model);
+    @GET("request/{id}")
+    Call<RequestModel> getRequest(@Header("api-key") String api_key, @Path("id") int id);
+
+
+    @POST("requests/{id}")
+    Call<RequestModel> updateRequest(@Header("api-key") String api_key,@Path("id") int id,
+                                      @Field("user_id") int user_id,
+                                      @Field("item_id") int item_id,
+                                      @Field("address") String address,
+                                      @Field("request_date") String request_date,
+                                      @Field("status") String status,
+                                      @Field("weight") double weight,
+                                      @Field("total_price") double total_price,
+                                      @Field("notes") String notes);
 
     // Recyclable Item Management (CRUD)
     @GET("recyclable_items")
     Call<List<RecyclableItem>> getRecyclableItems(@Header("api-key") String api_key);
 
     @POST("recyclable_items")
-    Call<Void> addRecyclableItem(@Body RecyclableItem item);
+    Call<Void> addRecyclableItem(@Header("api-key") String api_key,@Body RecyclableItem item);
 
     @PUT("recyclable_items/{id}")
-    Call<Void> updateRecyclableItem(@Path("id") int id, @Body RecyclableItem item);
+    Call<Void> updateRecyclableItem(@Header("api-key") String api_key, @Path("id") int id, @Body RecyclableItem item);
 
     @DELETE("recyclable_items/{id}")
-    Call<Void> deleteRecyclableItem(@Path("id") int id);
+    Call<DeleteResponse> deleteRecyclableItem(@Header("api-key") String api_key, @Path("id") int id);
 }
 

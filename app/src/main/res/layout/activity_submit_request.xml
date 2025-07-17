@@ -116,6 +116,32 @@
                 android:inputType="textMultiLine"
                 android:layout_marginBottom="24dp" />
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:text="Request Date :" />
+
+                <TextView
+                    android:id="@+id/tvCreated"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:text="YYYY-MM-DD" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Date"
+                    android:layout_weight="0.35"
+                    android:onClick="showDatePickerDialog" />
+
+            </LinearLayout>
+
             <!-- Submit Button -->
             <Button
                 android:id="@+id/btnSubmitRequest"

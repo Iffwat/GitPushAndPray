@@ -40,14 +40,14 @@ public class ViewRequestActivity extends AppCompatActivity {
         recyclerRequests.setAdapter(requestAdapter);
 
         userService = ApiUtils.getUserService();
-        int userId = new SharedPrefManager(this).getUser().getId();
+        String token = new SharedPrefManager(this).getUser().getToken();
 
         // Load requests
-        loadMyRequests(userId);
+        loadMyRequests(token);
 
         // Handle cancel click
         requestAdapter.setCancelClickListener((requestId, position) -> {
-            userService.cancelRequest(requestId).enqueue(new Callback<Void>() {
+            userService.cancelRequest(token,requestId).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -67,8 +67,8 @@ public class ViewRequestActivity extends AppCompatActivity {
         });
     }
 
-    private void loadMyRequests(int userId) {
-        userService.getUserRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() { //error getMyRequest()
+    private void loadMyRequests(String token) {
+        userService.getUserRequests(token).enqueue(new Callback<List<RequestHistoryModel>>() { //error getMyRequest()
             @Override
             public void onResponse(Call<List<RequestHistoryModel>> call, Response<List<RequestHistoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
