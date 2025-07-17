@@ -61,7 +61,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
             holder.btnCancel.setOnClickListener(v -> {
                 if (cancelListener != null) {
-                    cancelListener.onCancelClicked(request.getRequestId(), getAdapterPosition());
+                    cancelListener.onCancelClicked(request.getRequestId(), holder.getAdapterPosition());
                 }
             });
         }

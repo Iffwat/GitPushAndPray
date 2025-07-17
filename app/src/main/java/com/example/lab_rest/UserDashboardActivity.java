@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -70,6 +71,26 @@ public class UserDashboardActivity extends AppCompatActivity {
                 });
 
                 popupMenu.show();
+            }
+        });
+
+
+        Button btnViewMyRequest = findViewById(R.id.btnViewMyRequest);
+        Button btnSubmitNewRequest = findViewById(R.id.btnSubmitNewRequest);
+
+        btnViewMyRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserDashboardActivity.this, ViewRequestActivity.class); // or UserRequest.class if that's the screen you're using
+                startActivity(intent);
+            }
+        });
+
+        btnSubmitNewRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(UserDashboardActivity.this, SubmitRequestActivity.class);
+                startActivity(intent);
             }
         });
     }

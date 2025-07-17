@@ -2,6 +2,7 @@ package com.example.lab_rest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lab_rest.model.LoginRequest;
 import com.example.lab_rest.model.LoginResponse;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,40 +57,40 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         LoginRequest request = new LoginRequest(username, password);
-        Call<LoginResponse> call = userService.loginUser(request);
+        Call<User> call;
+        if (username.contains("@")) {
+            call = userService.loginEmail(username, password);
+        } else {
+            call = userService.login(username, password);
+        }
 
-        call.enqueue(new Callback<LoginResponse>() {
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    LoginResponse loginResponse = response.body();
+                    User user = response.body();
+                    SharedPrefManager sharedPrefManager = new SharedPrefManager(LoginActivity.this);
+                    sharedPrefManager.storeUser(user);
 
-                    if (loginResponse.getStatus().equals("success")) {
-                        SharedPrefManager sharedPrefManager = new SharedPrefManager(LoginActivity.this);
-                        sharedPrefManager.storeUser(loginResponse.getUser());
+                    Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
 
-                        String role = loginResponse.getUser().getRole();
-                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
-
-                        if (role.equals("admin")) {
-                            startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
-                        } else {
-                            startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
-                        }
-
-                        finish(); // Optional: prevent going back to login
+                    if ("admin".equals(user.getRole())) {
+                        startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
                     } else {
-                        Toast.makeText(LoginActivity.this, loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(LoginActivity.this, UserDashboardActivity.class));
                     }
+                    finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, "Login failed. Try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid login. Check credentials.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
 }

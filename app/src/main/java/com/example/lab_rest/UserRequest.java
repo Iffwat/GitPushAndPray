@@ -47,7 +47,7 @@ public class UserRequest extends AppCompatActivity {
     }
 
     private void loadRequests(int userId) {
-        userService.getUserRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() {
+        userService.getUserRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() { // error getUserRequest()
             @Override
             public void onResponse(Call<List<RequestHistoryModel>> call, Response<List<RequestHistoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {

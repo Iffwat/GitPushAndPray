@@ -68,7 +68,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     }
 
     private void loadMyRequests(int userId) {
-        userService.getMyRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() {
+        userService.getUserRequests(userId).enqueue(new Callback<List<RequestHistoryModel>>() { //error getMyRequest()
             @Override
             public void onResponse(Call<List<RequestHistoryModel>> call, Response<List<RequestHistoryModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
