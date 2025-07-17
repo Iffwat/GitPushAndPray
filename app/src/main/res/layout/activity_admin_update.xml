@@ -125,7 +125,8 @@
                 android:text="Update Request"
                 android:textAllCaps="false"
                 android:backgroundTint="#00796B"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF"
+                android:onClick="updateRequest"/>
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

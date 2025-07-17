@@ -5,8 +5,10 @@ import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lab_rest.model.RecyclableItem;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
+import com.example.lab_rest.sharedpref.SharedPrefManager;
 
 import retrofit2.*;
 
@@ -27,6 +29,9 @@ public class ItemFormActivity extends AppCompatActivity {
         edtPricePerKg = findViewById(R.id.edtPricePerKg);
         btnSaveItem = findViewById(R.id.btnSaveItem);
 
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
         UserService userService = ApiUtils.getUserService();
 
         // Check if this is edit mode
@@ -63,9 +68,9 @@ public class ItemFormActivity extends AppCompatActivity {
 
             if (isEdit) {
                 item.setItemId(itemId);
-                userService.updateRecyclableItem(itemId, item).enqueue(responseCallback("updated"));
+                userService.updateRecyclableItem(token,itemId, item).enqueue(responseCallback("updated"));
             } else {
-                userService.addRecyclableItem(item).enqueue(responseCallback("added"));
+                userService.addRecyclableItem(token,item).enqueue(responseCallback("added"));
             }
         });
     }

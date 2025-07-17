@@ -23,11 +23,12 @@ public class AdminRequestAdapter extends RecyclerView.Adapter<AdminRequestAdapte
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvItemName, tvUsername, tvAddress, tvStatus;
+        TextView tvItemName, tvUsername, tvAddress, tvStatus, tvUID;
         Button btnUpdate;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            tvUID = itemView.findViewById(R.id.tvUID);
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             tvAddress = itemView.findViewById(R.id.tvAddress);
@@ -47,6 +48,7 @@ public class AdminRequestAdapter extends RecyclerView.Adapter<AdminRequestAdapte
     public void onBindViewHolder(AdminRequestAdapter.ViewHolder holder, int position) {
         AdminRequestModel request = requestList.get(position);
 
+        holder.tvUID.setText("UID: " + request.getUserId());
         holder.tvItemName.setText("Item: " + request.getItemName());
         holder.tvUsername.setText("User: " + request.getUsername());
         holder.tvAddress.setText("Address: " + request.getAddress());

@@ -61,7 +61,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         } else {
             User user = spm.getUser();
-            tvWelcome.setText("Hello " + user.getUsername());
+            tvWelcome.setText("Hello " + user.getEmail());
         }
 
         // ADD: Set up the popup menu for logout
