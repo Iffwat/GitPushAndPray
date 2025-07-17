@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.*;
 
 import com.example.lab_rest.adapter.ItemAdapter;
 import com.example.lab_rest.model.RecyclableItem;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
+import com.example.lab_rest.sharedpref.SharedPrefManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.*;
@@ -62,7 +64,12 @@ public class ItemManagementActivity extends AppCompatActivity {
     }
 
     private void loadItems() {
-        userService.getRecyclableItems().enqueue(new Callback<List<RecyclableItem>>() {
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
+        //int user_id = user.getId();
+        userService = ApiUtils.getUserService();
+        userService.getRecyclableItems(token).enqueue(new Callback<List<RecyclableItem>>() {
             @Override
             public void onResponse(Call<List<RecyclableItem>> call, Response<List<RecyclableItem>> response) {
                 if (response.isSuccessful() && response.body() != null) {

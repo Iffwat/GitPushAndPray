@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.*;
 import com.example.lab_rest.adapter.AdminRequestAdapter;
 import com.example.lab_rest.model.AdminRequestModel;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
+import com.example.lab_rest.sharedpref.SharedPrefManager;
 
 import java.util.*;
 
@@ -36,7 +38,12 @@ public class AdminRequestListActivity extends AppCompatActivity {
     }
 
     private void loadAllRequests() {
-        userService.getAllRequests().enqueue(new Callback<List<AdminRequestModel>>() {
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
+        //int user_id = user.getId();
+        userService = ApiUtils.getUserService();
+        userService.getAllRequests(token).enqueue(new Callback<List<AdminRequestModel>>() {
             @Override
             public void onResponse(Call<List<AdminRequestModel>> call, Response<List<AdminRequestModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {

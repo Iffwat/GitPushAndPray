@@ -19,6 +19,7 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -42,32 +43,32 @@ public interface UserService {
     @GET("user/requests/{userId}")
     Call<List<RequestHistoryModel>> getUserRequests(@Path("userId") int userId);
 
-    @DELETE("request/{id}")
+    @DELETE("requests/{id}")
     Call<Void> cancelRequest(@Path("id") int requestId);
 
     @Headers("Content-Type: application/json")
-    @POST("submit-request")
+    @POST("requests")
     Call<Void> submitRequest(@Body RequestModel request);
 
     // Admin Requests
-    @GET("all-requests")
-    Call<List<AdminRequestModel>> getAllRequests();
+    @GET("requests")
+    Call<List<AdminRequestModel>> getAllRequests(@Header("api-key") String api_key);
 
     @Headers("Content-Type: application/json")
-    @POST("update-request")
+    @POST("requests")
     Call<Map<String, String>> updateRequest(@Body UpdateRequestModel model);
 
     // Recyclable Item Management (CRUD)
-    @GET("get-items")
-    Call<List<RecyclableItem>> getRecyclableItems();
+    @GET("recyclable_items")
+    Call<List<RecyclableItem>> getRecyclableItems(@Header("api-key") String api_key);
 
-    @POST("recyclable-items")
+    @POST("recyclable_items")
     Call<Void> addRecyclableItem(@Body RecyclableItem item);
 
-    @PUT("recyclable-items/{id}")
+    @PUT("recyclable_items/{id}")
     Call<Void> updateRecyclableItem(@Path("id") int id, @Body RecyclableItem item);
 
-    @DELETE("recyclable-items/{id}")
+    @DELETE("recyclable_items/{id}")
     Call<Void> deleteRecyclableItem(@Path("id") int id);
 }
 

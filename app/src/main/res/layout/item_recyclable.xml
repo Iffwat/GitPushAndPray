@@ -20,7 +20,7 @@
 
             <TextView
                 android:id="@+id/tvItemName"
-                android:text="Plastic"
+                android:text="[itemName]"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="#000000"
@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/tvPrice"
-                android:text="Price: RM 1.20 /kg"
+                android:text="Price: RM [pricePerKg] /kg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

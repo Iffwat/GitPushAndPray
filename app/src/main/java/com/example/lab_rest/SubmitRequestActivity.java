@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lab_rest.model.RecyclableItem;
 import com.example.lab_rest.model.RequestModel;
+import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
@@ -116,7 +117,12 @@ public class SubmitRequestActivity extends AppCompatActivity {
     }
 
     private void loadItemsFromDatabase() {
-        Call<List<RecyclableItem>> call = userService.getRecyclableItems();
+        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
+        User user = spm.getUser();
+        String token = user.getToken();
+        //int user_id = user.getId();
+        userService = ApiUtils.getUserService();
+        Call<List<RecyclableItem>> call = userService.getRecyclableItems(token);
 
         call.enqueue(new Callback<List<RecyclableItem>>() {
             @Override
