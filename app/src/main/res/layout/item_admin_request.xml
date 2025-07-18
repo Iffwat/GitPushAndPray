@@ -15,7 +15,7 @@
             android:id="@+id/tvUID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Item: Paper"
+            android:text="UID: 1"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -44,6 +44,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status: Pending" />
+
+        <!-- ✅ Added Total Price TextView -->
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Price: RM 0.00"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
 
         <Button
             android:id="@+id/btnUpdate"

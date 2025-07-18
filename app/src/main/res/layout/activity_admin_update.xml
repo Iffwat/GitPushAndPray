@@ -21,7 +21,6 @@
             android:gravity="center_vertical"
             android:elevation="4dp">
 
-            <!-- Logo -->
             <ImageView
                 android:id="@+id/imgLogo"
                 android:layout_width="36dp"
@@ -30,7 +29,6 @@
                 android:contentDescription="App Logo"
                 android:layout_marginEnd="8dp" />
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="0dp"
@@ -41,7 +39,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Profile/Logout Icon -->
             <ImageView
                 android:id="@+id/imgProfile"
                 android:layout_width="32dp"
@@ -65,7 +62,7 @@
                 android:id="@+id/tvItemName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Item Name: Plastic"
+                android:text="Item Name: "
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
@@ -107,12 +104,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Total Price (read-only display) -->
+            <!-- Total Price -->
             <TextView
                 android:id="@+id/tvTotalPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Total Price: RM 0.00"
+                android:text="Total Price: RM -"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="24dp" />

@@ -22,6 +22,7 @@ import com.example.lab_rest.model.DeleteResponse;
 import com.example.lab_rest.model.RecyclableItem;
 import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
+import com.example.lab_rest.remote.ItemService;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
 
@@ -36,6 +37,7 @@ public class ItemManagementActivity extends AppCompatActivity {
     private RecyclerView recyclerItems;
     private ItemAdapter adapter;
     private UserService userService;
+    private ItemService itemService;
     private List<RecyclableItem> currentItems;
     private int contextMenuPosition = -1;
 
@@ -49,6 +51,7 @@ public class ItemManagementActivity extends AppCompatActivity {
         registerForContextMenu(recyclerItems);
 
         userService = ApiUtils.getUserService();
+        itemService = ApiUtils.getItemService();
 
         loadItems();
     }
@@ -68,22 +71,22 @@ public class ItemManagementActivity extends AppCompatActivity {
             //user clicked the delete contextual menu
             doDeleteBook(SItem);
         }
-        else if (item.getItemId() == R.id.menu_update) {
-            // user clicked the update contextual menu
-            doUpdateBook(SItem);
-        }
 
         return super.onContextItemSelected(item);
     }
 
+    public void floatingAddBookClicked(View view) {
+        // Example: Start AddItemActivity
+        Intent intent = new Intent(this, AddItemActivity.class);
+        startActivity(intent);
+    }
     private void doDeleteBook(RecyclableItem SItem) {
         // get user info from SharedPreferences
         SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
         User user = spm.getUser();
 
         // prepare REST API call
-        UserService userService = ApiUtils.getUserService();
-        Call<DeleteResponse> call = userService.deleteRecyclableItem(user.getToken(), SItem.getItemId());
+        Call<DeleteResponse> call = itemService.deleteRecyclableItem(user.getToken(), SItem.getItemId());
 
         // execute the call
         call.enqueue(new Callback<DeleteResponse>() {
@@ -154,7 +157,7 @@ public class ItemManagementActivity extends AppCompatActivity {
         User user = spm.getUser();
         String token = user.getToken();
 
-        userService.getRecyclableItems(token).enqueue(new Callback<List<RecyclableItem>>() {
+        itemService.getRecyclableItems(token).enqueue(new Callback<List<RecyclableItem>>() {
             @Override
             public void onResponse(Call<List<RecyclableItem>> call, Response<List<RecyclableItem>> response) {
                 Log.d("MyApp", "Response: " + response.raw());

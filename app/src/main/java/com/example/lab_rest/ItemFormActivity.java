@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.lab_rest.model.RecyclableItem;
 import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
+import com.example.lab_rest.remote.ItemService;
+import com.example.lab_rest.remote.RequestService;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
 
@@ -29,12 +31,14 @@ public class ItemFormActivity extends AppCompatActivity {
         edtPricePerKg = findViewById(R.id.edtPricePerKg);
         btnSaveItem = findViewById(R.id.btnSaveItem);
 
+        // Get logged-in user token from SharedPreferences
         SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
         User user = spm.getUser();
-        String token = user.getToken();
+        String token = "Bearer " + user.getToken(); // ⚠️ Add 'Bearer ' if required by your backend
         UserService userService = ApiUtils.getUserService();
+        ItemService itemService = ApiUtils.getItemService();
 
-        // Check if this is edit mode
+        // Edit mode check
         if (getIntent().hasExtra("itemId")) {
             isEdit = true;
             itemId = getIntent().getIntExtra("itemId", -1);
@@ -68,9 +72,9 @@ public class ItemFormActivity extends AppCompatActivity {
 
             if (isEdit) {
                 item.setItemId(itemId);
-                userService.updateRecyclableItem(token,itemId, item).enqueue(responseCallback("updated"));
+                itemService.updateRecyclableItem(token, itemId, item).enqueue(responseCallback("updated"));
             } else {
-                userService.addRecyclableItem(token,item).enqueue(responseCallback("added"));
+                itemService.addRecyclableItem(token, item).enqueue(responseCallback("added"));
             }
         });
     }
@@ -81,7 +85,7 @@ public class ItemFormActivity extends AppCompatActivity {
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(ItemFormActivity.this, "Item " + action + " successfully", Toast.LENGTH_SHORT).show();
-                    finish(); // go back
+                    finish(); // Close activity
                 } else {
                     Toast.makeText(ItemFormActivity.this, "Failed to " + action + " item", Toast.LENGTH_SHORT).show();
                 }

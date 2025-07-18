@@ -1,24 +1,20 @@
-// File: AdminUpdateActivity.java
 package com.example.lab_rest;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.lab_rest.model.RequestModel;
-import com.example.lab_rest.model.User;
 import com.example.lab_rest.remote.ApiUtils;
+import com.example.lab_rest.remote.RequestService;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
 
@@ -28,152 +24,131 @@ import retrofit2.Response;
 
 public class AdminUpdateActivity extends AppCompatActivity {
 
-    private TextView tvItemName, tvUserNotes, tvTotalPrice;
+    private TextView tvItemName, tvNotes, tvTotalPrice;
     private EditText edtWeight;
     private Spinner spinnerStatus;
     private Button btnUpdateRequest;
 
-    private double pricePerKg = 0.0;
-    private int requestId;
+    private int requestId, itemId, userId;
+    private String currentStatus, notes, address;
+    private double pricePerKg, weightValue = 0.0, totalPrice = 0.0;
 
     private UserService userService;
-    private RequestModel requestModel;
+    private RequestService requestService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_update);
 
-        Intent intent = getIntent();
-        requestId = intent.getIntExtra("requestId", -1);
-
+        // Initialize views
         tvItemName = findViewById(R.id.tvItemName);
-        tvUserNotes = findViewById(R.id.tvNotes);
+        tvNotes = findViewById(R.id.tvNotes);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         edtWeight = findViewById(R.id.edtWeight);
         spinnerStatus = findViewById(R.id.spinnerStatus);
         btnUpdateRequest = findViewById(R.id.btnUpdateRequest);
 
-        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
-        User user = spm.getUser();
+        // Get Intent data
+        requestId = getIntent().getIntExtra("request_id", -1);
+        itemId = getIntent().getIntExtra("item_id", -1);
+        userId = getIntent().getIntExtra("user_id", -1);
+        currentStatus = getIntent().getStringExtra("status");
+        notes = getIntent().getStringExtra("notes");
+        address = getIntent().getStringExtra("address");
+        pricePerKg = getIntent().getDoubleExtra("price_per_kg", 0.0);
+
+        // Display data
+        tvItemName.setText("Item ID: " + itemId);
+        tvNotes.setText("User Notes: " + (notes == null ? "-" : notes));
+
+        // Status spinner
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.status_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStatus.setAdapter(adapter);
+        if (currentStatus != null) {
+            int position = adapter.getPosition(currentStatus);
+            spinnerStatus.setSelection(position);
+        }
+
+        // Auto-calculate price when user leaves weight field
+        edtWeight.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) calculateTotalPrice();
+        });
+
+        // Update button
+        btnUpdateRequest.setOnClickListener(v -> {
+            updateRequest();
+        });
 
         userService = ApiUtils.getUserService();
-
-        // Fetch request details
-        userService.getRequest(user.getToken(), requestId).enqueue(new Callback<RequestModel>() {
-            @Override
-            public void onResponse(Call<RequestModel> call, Response<RequestModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    requestModel = response.body();
-                    tvItemName.setText("Item: " + requestModel.getItemId());
-                    tvUserNotes.setText("User Notes: " + requestModel.getNotes());
-                    edtWeight.setText(String.valueOf(requestModel.getWeight()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RequestModel> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error connecting", Toast.LENGTH_LONG).show();
-            }
-        });
-
-        // Spinner setup
-        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                new String[]{"Pending", "Completed"});
-        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerStatus.setAdapter(statusAdapter);
-
-        // Auto-calculate price
-        edtWeight.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) calculateTotal();
-        });
-
-        // Update button click
-        btnUpdateRequest.setOnClickListener(this::updateRequest);
+        requestService = ApiUtils.getRequestService();
     }
 
-    public void clearSessionAndRedirect() {
-        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
-        spm.logout();
-        finish();
-        startActivity(new Intent(this, LoginActivity.class));
+    private void calculateTotalPrice() {
+        String weightStr = edtWeight.getText().toString().trim();
+        if (!weightStr.isEmpty()) {
+            try {
+                weightValue = Double.parseDouble(weightStr);
+                double total = weightValue * pricePerKg;
+                tvTotalPrice.setText("Total Price: RM " + String.format("%.2f", total));
+            } catch (NumberFormatException e) {
+                tvTotalPrice.setText("Total Price: RM -");
+                weightValue = 0.0;
+            }
+        } else {
+            tvTotalPrice.setText("Total Price: RM -");
+        }
     }
 
-    public void updateRequest(View view) {
-        if (requestModel == null) {
-            Toast.makeText(this, "Request not loaded yet", Toast.LENGTH_SHORT).show();
+    private void updateRequest() {
+        String apiKey = new SharedPrefManager(this).getUser().getToken();
+        String status = spinnerStatus.getSelectedItem().toString();
+
+        // ✅ Recalculate weight and total price safely here
+        String weightStr = edtWeight.getText().toString().trim();
+        if (weightStr.isEmpty()) {
+            Toast.makeText(this, "Please enter weight.", Toast.LENGTH_SHORT).show();
             return;
         }
-        String weightText = edtWeight.getText().toString().trim();
-        if (weightText.isEmpty()) {
-            Toast.makeText(this, "Weight cannot be empty", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        double weight;
+
         try {
-            weight = Double.parseDouble(weightText);
+            weightValue = Double.parseDouble(weightStr);
         } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid weight", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid weight value.", Toast.LENGTH_SHORT).show();
             return;
         }
-        requestModel.setWeight(weight);
-        requestModel.setStatus(spinnerStatus.getSelectedItem().toString());
 
-        SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
-        User user = spm.getUser();
+        totalPrice = weightValue * pricePerKg;
 
-        Call<RequestModel> call = userService.updateRequest(
-                user.getToken(),
-                requestModel.getRequestId(),
-                requestModel.getUserId(),
-                requestModel.getItemId(),
-                requestModel.getAddress(),
-                requestModel.getRequestDate(),
-                requestModel.getStatus(),
-                requestModel.getWeight(),
-                requestModel.getTotalPrice(),
-                requestModel.getNotes()
+        Call<RequestModel> call = requestService.updateRequest(
+                apiKey,
+                requestId,
+                userId,
+                itemId,
+                address,
+                status,
+                weightValue,
+                totalPrice,
+                notes
         );
 
         call.enqueue(new Callback<RequestModel>() {
             @Override
             public void onResponse(Call<RequestModel> call, Response<RequestModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    displayUpdateSuccess("Request updated successfully!");
+                if (response.isSuccessful()) {
+                    Toast.makeText(AdminUpdateActivity.this, "Request updated successfully", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Update failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AdminUpdateActivity.this, "Update failed. Try again.", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<RequestModel> call, Throwable throwable) {
-                Toast.makeText(getApplicationContext(), "Network error", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<RequestModel> call, Throwable t) {
+                Toast.makeText(AdminUpdateActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    public void displayUpdateSuccess(String message) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        startActivity(new Intent(getApplicationContext(), AdminRequestListActivity.class));
-                        finish();
-                        dialog.cancel();
-                    }
-                }).show();
-    }
-
-    private void calculateTotal() {
-        try {
-            double weight = Double.parseDouble(edtWeight.getText().toString());
-            double total = weight * pricePerKg;
-            tvTotalPrice.setText(String.format("Total Price: RM %.2f", total));
-        } catch (Exception ignored) {
-            tvTotalPrice.setText("Total Price: RM -");
-        }
     }
 }

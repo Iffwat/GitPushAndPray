@@ -1,56 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/adminAllRequestsLayout"
+    android:id="@+id/layoutRequestList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="16dp"
     android:background="#FFFFFF">
 
-    <!-- ✅ Header Bar -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#B2EBF2"
-        android:padding="12dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:elevation="4dp">
+        android:paddingBottom="12dp">
 
-        <!-- Logo -->
         <ImageView
-            android:id="@+id/imgLogo"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:src="@drawable/recycle_logo"
-            android:contentDescription="App Logo"
+            android:contentDescription="Logo"
             android:layout_marginEnd="8dp" />
 
-        <!-- Title -->
         <TextView
-            android:id="@+id/tvAdminTitle"
-            android:layout_width="0dp"
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="All Recycle Requests"
-            android:textColor="#00796B"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <!-- Profile Icon -->
-        <ImageView
-            android:id="@+id/imgAdminProfile"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@drawable/ic_person"
-            android:contentDescription="Admin Profile"
-            android:clickable="true"
-            android:focusable="true" />
+            android:text="Admin - All Pickup Requests"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#00796B" />
     </LinearLayout>
 
-    <!-- ✅ List of Requests -->
+    <!-- RecyclerView for the request list -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerAllRequests"
+        android:id="@+id/recyclerRequests"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:indeterminate="true" />
+
 </LinearLayout>

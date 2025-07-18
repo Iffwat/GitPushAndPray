@@ -8,13 +8,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lab_rest.adapter.RequestAdapter;
-import com.example.lab_rest.model.RequestHistoryModel;
+import com.example.lab_rest.model.RecyclableItem;
+import com.example.lab_rest.model.RequestModel;
 import com.example.lab_rest.remote.ApiUtils;
+import com.example.lab_rest.remote.ItemService;
+import com.example.lab_rest.remote.RequestService;
 import com.example.lab_rest.remote.UserService;
 import com.example.lab_rest.sharedpref.SharedPrefManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,8 +29,11 @@ public class ViewRequestActivity extends AppCompatActivity {
 
     private RecyclerView recyclerRequests;
     private RequestAdapter requestAdapter;
-    private List<RequestHistoryModel> requestList;
+    private List<RequestModel> requestList;
     private UserService userService;
+    private ItemService itemService;
+    private RequestService requestService;
+    private Map<Integer, String> itemNameMap = new HashMap<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,18 +44,44 @@ public class ViewRequestActivity extends AppCompatActivity {
         recyclerRequests.setLayoutManager(new LinearLayoutManager(this));
 
         requestList = new ArrayList<>();
-        requestAdapter = new RequestAdapter(requestList);
-        recyclerRequests.setAdapter(requestAdapter);
-
         userService = ApiUtils.getUserService();
+        itemService = ApiUtils.getItemService();
+        requestService = ApiUtils.getRequestService();
         String token = new SharedPrefManager(this).getUser().getToken();
 
-        // Load requests
-        loadMyRequests(token);
+        // Load item names first, then load requests
+        loadItemNamesAndRequests(token);
+    }
 
-        // Handle cancel click
+    private void loadItemNamesAndRequests(String token) {
+        itemService.getRecyclableItems(token).enqueue(new Callback<List<RecyclableItem>>() {
+            @Override
+            public void onResponse(Call<List<RecyclableItem>> call, Response<List<RecyclableItem>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (RecyclableItem item : response.body()) {
+                        itemNameMap.put(item.getItemId(), item.getItemName());
+                    }
+                    setupAdapter(); // Now safe to setup adapter
+                    loadMyRequests(token);
+                } else {
+                    Toast.makeText(ViewRequestActivity.this, "Failed to load item names", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<RecyclableItem>> call, Throwable t) {
+                Toast.makeText(ViewRequestActivity.this, "Error loading items: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupAdapter() {
+        requestAdapter = new RequestAdapter(requestList, itemNameMap);
+        recyclerRequests.setAdapter(requestAdapter);
+
         requestAdapter.setCancelClickListener((requestId, position) -> {
-            userService.cancelRequest(token,requestId).enqueue(new Callback<Void>() {
+            String token = new SharedPrefManager(this).getUser().getToken();
+            requestService.cancelRequest(token, requestId).enqueue(new Callback<Void>() {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
@@ -68,9 +102,9 @@ public class ViewRequestActivity extends AppCompatActivity {
     }
 
     private void loadMyRequests(String token) {
-        userService.getUserRequests(token).enqueue(new Callback<List<RequestHistoryModel>>() { //error getMyRequest()
+        requestService.getUserRequests(token).enqueue(new Callback<List<RequestModel>>() {
             @Override
-            public void onResponse(Call<List<RequestHistoryModel>> call, Response<List<RequestHistoryModel>> response) {
+            public void onResponse(Call<List<RequestModel>> call, Response<List<RequestModel>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     requestList.clear();
                     requestList.addAll(response.body());
@@ -81,7 +115,7 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<RequestHistoryModel>> call, Throwable t) {
+            public void onFailure(Call<List<RequestModel>> call, Throwable t) {
                 Toast.makeText(ViewRequestActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

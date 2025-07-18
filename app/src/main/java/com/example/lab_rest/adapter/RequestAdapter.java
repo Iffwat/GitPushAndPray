@@ -9,21 +9,24 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.lab_rest.R;
-import com.example.lab_rest.model.RequestHistoryModel;
+import com.example.lab_rest.model.RequestModel;
 
 import java.util.List;
+import java.util.Map;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
 
-    private List<RequestHistoryModel> requestList;
+    private List<RequestModel> requestList;
+    private Map<Integer, String> itemNameMap; // ✅ Mapping from item_id to item_name
 
-    public RequestAdapter(List<RequestHistoryModel> requestList) {
+    public RequestAdapter(List<RequestModel> requestList, Map<Integer, String> itemNameMap) {
         this.requestList = requestList;
+        this.itemNameMap = itemNameMap;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemName, tvAddress, tvStatus, tvPrice;
-        Button btnCancel; // ✅ Add this
+        Button btnCancel;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -31,10 +34,9 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             tvAddress = itemView.findViewById(R.id.tvAddress);
             tvStatus = itemView.findViewById(R.id.tvStatus);
             tvPrice = itemView.findViewById(R.id.tvPrice);
-            btnCancel = itemView.findViewById(R.id.btnCancel); // ✅ Already used here
+            btnCancel = itemView.findViewById(R.id.btnCancel);
         }
     }
-
 
     @Override
     public RequestAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,9 +46,12 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(RequestAdapter.ViewHolder holder, int position) {
-        RequestHistoryModel request = requestList.get(position);
+        RequestModel request = requestList.get(position);
 
-        holder.tvItemName.setText("Item: " + request.getItemName());
+        // ✅ Lookup the item name from map using item_id
+        String itemName = itemNameMap != null ? itemNameMap.getOrDefault(request.getItemId(), "Unknown") : "Unknown";
+        holder.tvItemName.setText("Item: " + itemName);
+
         holder.tvAddress.setText("Address: " + request.getAddress());
         holder.tvStatus.setText("Status: " + request.getStatus());
 
@@ -65,9 +70,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                 }
             });
         }
-
-
     }
+
     public interface CancelClickListener {
         void onCancelClicked(int requestId, int position);
     }
@@ -77,7 +81,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     public void setCancelClickListener(CancelClickListener listener) {
         this.cancelListener = listener;
     }
-
 
     @Override
     public int getItemCount() {

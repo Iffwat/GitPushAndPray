@@ -69,7 +69,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // bind data to the view holder instance
-         RecyclableItem m = itemList.get(position);
+        RecyclableItem m = itemList.get(position);
         holder.tvItemName.setText(m.getItemName());
         holder.tvPrice.setText("Price: RM " + m.getPricePerKg() + " /kg");
 

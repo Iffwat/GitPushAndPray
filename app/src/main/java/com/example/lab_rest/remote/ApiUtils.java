@@ -10,6 +10,14 @@ public class ApiUtils {
         return RetrofitClient.getClient(BASE_URL).create(UserService.class);
     }
 
+    public static ItemService getItemService(){
+        return RetrofitClient.getClient(BASE_URL).create(ItemService.class);
+    }
+
+    public static RequestService getRequestService(){
+        return RetrofitClient.getClient(BASE_URL).create(RequestService.class);
+    }
+
 
 
 }
