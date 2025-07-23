@@ -32,11 +32,12 @@ public interface ItemService {
     @GET("recyclable_items/{id}")
     Call<RecyclableItem> getItemById(@Header("api-key") String api_key, @Path("id") int id);
 
-    @POST("recyclable_items")
-    Call<Void> addRecyclableItem(@Header("api-key") String api_key, @Body RecyclableItem item);
 
-    @PUT("recyclable_items/{id}")
-    Call<Void> updateRecyclableItem(@Header("api-key") String api_key, @Path("id") int id, @Body RecyclableItem item);
+    @FormUrlEncoded
+    @POST ("recyclable_items/{id}")
+    Call<RecyclableItem> updateRecyclableItem(@Header("api-key") String api_key, @Path("id") int id,
+                                              @Field("item_name") String itemName, @Field("price_per_kg") double priceperkg);
+
 
     @DELETE("recyclable_items/{id}")
     Call<DeleteResponse> deleteRecyclableItem(@Header("api-key") String api_key, @Path("id") int id);

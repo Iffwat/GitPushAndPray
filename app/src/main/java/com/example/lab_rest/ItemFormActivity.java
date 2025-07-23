@@ -70,12 +70,6 @@ public class ItemFormActivity extends AppCompatActivity {
             item.setItemName(name);
             item.setPricePerKg(price);
 
-            if (isEdit) {
-                item.setItemId(itemId);
-                itemService.updateRecyclableItem(token, itemId, item).enqueue(responseCallback("updated"));
-            } else {
-                itemService.addRecyclableItem(token, item).enqueue(responseCallback("added"));
-            }
         });
     }
 

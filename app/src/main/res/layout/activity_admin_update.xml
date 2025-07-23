@@ -83,15 +83,16 @@
                 android:text="Weight Collected (kg):"
                 android:textStyle="bold" />
 
+            <!-- Status Spinner -->
+
             <EditText
                 android:id="@+id/edtWeight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:hint="e.g., 2.5"
-                android:inputType="numberDecimal"
-                android:layout_marginBottom="16dp" />
+                android:inputType="numberDecimal" />
 
-            <!-- Status Spinner -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

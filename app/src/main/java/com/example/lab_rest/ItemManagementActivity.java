@@ -63,13 +63,15 @@ public class ItemManagementActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
+    public boolean onContextItemSelected( MenuItem item) {
         RecyclableItem SItem = adapter.getSelectedItem();
         Log.d("MyApp", "selected "+SItem.toString());    // debug purpose
 
         if (item.getItemId() == R.id.menu_delete) {
             //user clicked the delete contextual menu
-            doDeleteBook(SItem);
+            doDeleteItem(SItem);
+        }else if(item.getItemId() == R.id.menu_update){
+            doUpdateItem(SItem);
         }
 
         return super.onContextItemSelected(item);
@@ -80,7 +82,7 @@ public class ItemManagementActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddItemActivity.class);
         startActivity(intent);
     }
-    private void doDeleteBook(RecyclableItem SItem) {
+    private void doDeleteItem(RecyclableItem SItem) {
         // get user info from SharedPreferences
         SharedPrefManager spm = new SharedPrefManager(getApplicationContext());
         User user = spm.getUser();
@@ -130,11 +132,11 @@ public class ItemManagementActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    private void doUpdateBook(RecyclableItem SItem) {
+    private void doUpdateItem(RecyclableItem SItem) {
         Log.d("MyApp:", "updating Item: " + SItem.toString());
         // forward user to UpdateBookActivity, passing the selected book id
-        Intent intent = new Intent(getApplicationContext(), ItemFormActivity.class);
-        intent.putExtra("item_id", SItem.getItemId());
+        Intent intent = new Intent(getApplicationContext(), AdminUpdateItem.class);
+        intent.putExtra("itemId", SItem.getItemId());
         startActivity(intent);
     }
 

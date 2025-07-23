@@ -61,7 +61,6 @@ public class AdminUpdateActivity extends AppCompatActivity {
         // Display data
         tvItemName.setText("Item ID: " + itemId);
         tvNotes.setText("User Notes: " + (notes == null ? "-" : notes));
-
         // Status spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.status_options, android.R.layout.simple_spinner_item);
